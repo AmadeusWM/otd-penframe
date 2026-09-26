@@ -5,7 +5,7 @@ import Shell from 'gi://Shell';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import {AreaOutline} from './overlay.js';
+import {AreaSpotlight} from './overlay.js';
 import {WindowTracker} from './windowTracker.js';
 import {toDisplayArea, type Rect} from './geometry.js';
 import {OtdClient} from './otdClient.js';
@@ -21,7 +21,7 @@ export default class Penframe extends Extension {
     private settings: Gio.Settings | null = null;
     private settingsSignal = 0;
     private monitorSignal = 0;
-    private outline: AreaOutline | null = null;
+    private spotlight: AreaSpotlight | null = null;
     private tracker: WindowTracker | null = null;
     private calibration: CalibrationRunner | null = null;
     private calibrationTask: Promise<void> = Promise.resolve();
@@ -46,7 +46,7 @@ export default class Penframe extends Extension {
             this.settings = settings;
             this.automatic = settings.get_boolean('automatic-enabled');
             this.monitorChanged = false;
-            this.outline = new AreaOutline();
+            this.spotlight = new AreaSpotlight();
             this.tracker = new WindowTracker(
                 () => ({width: settings.get_int('area-width'), height: settings.get_int('area-height')}),
                 () => settings.get_int('settle-delay-ms'),
@@ -137,7 +137,7 @@ export default class Penframe extends Extension {
             if (!area)
                 this.calibration?.cancel();
             if (!this.calibration || !area)
-                this.outline?.showArea(area);
+                this.spotlight?.showArea(area);
         }
     }
 
@@ -179,7 +179,7 @@ export default class Penframe extends Extension {
     }
 
     private render(): void {
-        this.outline?.showArea(this.desired && (this.penVisible || this.penContact) ? this.applied : null);
+        this.spotlight?.showArea(this.desired && (this.penVisible || this.penContact) ? this.applied : null);
     }
 
     private report(error: unknown): void {
@@ -206,14 +206,14 @@ export default class Penframe extends Extension {
         const generation = this.generation;
         const calibration = new CalibrationRunner();
         this.calibration = calibration;
-        this.outline?.showArea(null);
+        this.spotlight?.showArea(null);
         try {
             await previousShutdown;
             if (generation !== this.generation)
                 return;
             await calibration.run(this.client(), area, () => {
                 if (this.calibration === calibration)
-                    this.outline?.showArea(target);
+                    this.spotlight?.showArea(target);
             });
         } catch (error) {
             this.report(error);
@@ -256,8 +256,8 @@ export default class Penframe extends Extension {
         this.cancelHideTimer();
         this.tracker?.destroy();
         this.tracker = null;
-        this.outline?.destroy();
-        this.outline = null;
+        this.spotlight?.destroy();
+        this.spotlight = null;
         this.settings = null;
         this.desired = null;
         this.applied = null;

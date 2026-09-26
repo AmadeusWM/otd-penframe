@@ -18,8 +18,8 @@ commands and limitations.
 ## Purpose
 
 Keep a fixed-size OpenTabletDriver (OTD) target area centered on the focused
-window. Show a subtle, noninteractive border around that area while the pen is
-active. Preserve drawing sensitivity as windows move or resize.
+window. Gently dim the desktop outside that area while the pen is active, with
+no border. Preserve drawing sensitivity as windows move or resize.
 
 This is desktop integration. Euthymia and other applications need no changes.
 
@@ -176,18 +176,21 @@ timing explicitly. If testing shows visible stroke jumps, use a more conservativ
 policy, such as applying after proximity-out, or investigate driver-side
 coordination. Do not describe the initial design as guaranteeing stroke safety.
 
-### Outline
+### Spotlight
 
-Use a thin, contrasting border with a transparent interior. It must not accept
-focus, intercept input, or reserve desktop space. Verify these properties with
-real pen and mouse input.
+Use 14% black dimming outside a transparent opening with 8 px rounded corners,
+without a border. The opening retains the fixed mapping dimensions. It must not
+accept focus, intercept input, or reserve desktop space. Verify these properties
+with real pen and mouse input.
 
-Show the outline on pen activity, keep it visible during contact, and fade it
-after inactivity. Confirm proximity-in/out reliability on the Wacom before using
-proximity as the sole visibility trigger. Keep it hidden during Overview and
-screen lock.
+Fade the spotlight in over 300 ms on pen activity, keep it visible during contact,
+and fade it out over 300 ms after inactivity. Repeated motion must not restart the
+fade, and returning activity reverses a fade-out from its current opacity.
+Confirm proximity-in/out reliability on the
+Wacom before using proximity as the sole visibility trigger. Keep it hidden
+during Overview and screen lock.
 
-The outline represents the last successfully applied and verified mapping,
+The spotlight represents the last successfully applied and verified mapping,
 including clamping. It must not move to an unconfirmed requested area. A brief
 preview after a mapping change is useful during development.
 

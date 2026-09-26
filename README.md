@@ -11,12 +11,13 @@ The first prototype targets GNOME 50 on Wayland and OTD 0.6.7:
   with a short settling delay for moves/resizes.
 - It keeps its size for small windows, clamps to the selected monitor, and hides
   during Overview or when there is no supported target.
-- The outline is noninteractive and has a transparent interior.
+- A noninteractive spotlight dims the surrounding desktop by 14%, leaving the
+  drawing area clear with gently rounded corners and no border.
 - An opt-in shortcut provides a single 30-second OTD calibration transaction,
   with readback verification and restoration of the previous area.
-- Automatic mode shows the border on tablet hover/motion and throughout tip
-  contact, then hides it after 700 ms of inactivity or proximity-out. Mouse
-  movement does not trigger it.
+- Automatic mode fades the spotlight in over 300 ms on tablet hover/motion and
+  keeps it visible throughout tip contact, then fades it out over 300 ms after
+  700 ms of inactivity or proximity-out. Mouse movement does not trigger it.
 - Pending mappings wait for tip-up. Unknown/disconnected tablet state suspends
   updates; disable restores the baseline if Penframe still owns the mapping.
 
@@ -30,7 +31,7 @@ full-monitor shortcut and preferences are not implemented yet.
 
 - TypeScript, strict `tsc` checks, and GNOME 50 `@girs` definitions; emitted ES
   modules run in GJS without a bundler.
-- St/Clutter and CSS for rendering; GSettings for configuration.
+- St/Clutter and Cairo for rendering; GSettings for configuration.
 - Asynchronous Gio subprocesses for the existing OTD CLI.
 - Nix for tools, packaging, and Home Manager integration.
 - Node's test runner and ESLint for checks.
@@ -76,8 +77,9 @@ timeout 60s dbus-run-session -- gnome-shell-test-tool \
 ```
 
 Success prints `PENFRAME_SHELL_TEST_PASS` and `PENFRAME_AUTOMATIC_TEST_PASS`. The
-test checks loading, focus/movement, fixed dimensions, nonreactive actors,
-Overview, window closure, and disable/re-enable. Fake OTD/helper processes also
+test checks loading, focus/movement, fixed dimensions, pixel-verified dimming and
+transparency, nonreactive actors, Overview, window closure, and disable/re-enable.
+Fake OTD/helper processes also
 exercise automatic focus mapping, contact deferral, pen-only visibility,
 inactivity hiding, and baseline restoration without touching the real driver.
 Set `PENFRAME_TEST_CAPTURE` to an absolute PNG filename to save a test screenshot.
@@ -178,8 +180,8 @@ release. An observer and an asynchronous OTD command cannot make this atomic;
 contact beginning during a command remains a physical validation case. Lift the
 pen before disabling, since shutdown restores the original mapping.
 
-The outline shows only a verified mapping. Mapping conflicts pause following;
-helper loss hides the outline and blocks updates. Monitor-layout changes require
+The spotlight shows only a verified mapping. Mapping conflicts pause following;
+helper loss hides the spotlight and blocks updates. Monitor-layout changes require
 checking OTD's coordinate model and re-enabling the extension. The initial scope
 is one active tablet in Artist mode, on the calibrated single monitor.
 
@@ -247,10 +249,10 @@ calibration mode does not run the activity helper or guard against contact.
    `calibrationEnabled = true` through Home Manager, and ensure the tablet profile
    and OTD executable are correct.
 3. Focus the test window, let it settle, and lift the pen out of proximity.
-4. Press **Super+Alt+P**. The outline briefly disappears during the command and
+4. Press **Super+Alt+P**. The spotlight briefly disappears during the command and
    returns only after OTD confirms the requested mapping.
 5. Hover the pen over the tablet's corners and center. Check that the on-screen
-   position matches the outline corners and center. Keep the window stationary.
+   position matches the clear area’s corners and center. Keep the window stationary.
 6. Lift the pen again. Press the shortcut a second time to restore early, or let
    the 30-second timer restore the original area.
 7. Check the restored area with `otd getareas 'Wacom CTL-4100WL'`.

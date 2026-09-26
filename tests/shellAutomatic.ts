@@ -68,17 +68,17 @@ while True:
     settings.set_boolean('automatic-enabled', true);
     Main.extensionManager.enableExtension(uuid);
     await Scripting.sleep(1000);
-    const outline = Main.layoutManager.uiGroup.get_children()
-        .find((actor): actor is St.Widget => actor instanceof St.Widget && actor.name === 'otd-penframe-outline');
-    assert(outline, 'Automatic mode must create one outline');
-    assert(!outline.visible, 'Automatic mode must stay hidden without pen activity');
+    const spotlight = Main.layoutManager.uiGroup.get_children()
+        .find((actor): actor is St.Widget => actor instanceof St.Widget && actor.name === 'otd-penframe-spotlight');
+    assert(spotlight, 'Automatic mode must create one spotlight');
+    assert(!spotlight.visible, 'Automatic mode must stay hidden without pen activity');
     const first = area();
     assert(first !== JSON.stringify(original), 'Focus must automatically apply a mapping');
     pen(false, true, true);
     await Scripting.sleep(150);
-    assert(outline.visible, 'Pen hover must show the verified area');
-    await Scripting.sleep(800);
-    assert(!outline.visible, 'Inactivity must hide the area');
+    assert(spotlight.visible, 'Pen hover must show the verified area');
+    await Scripting.sleep(1100);
+    assert(!spotlight.visible, 'Inactivity must hide the area');
 
     pen(true, true, true);
     await Scripting.sleep(150);
@@ -92,7 +92,7 @@ while True:
     second.activate(global.get_current_time());
     await Scripting.sleep(800);
     assert(area() === first, 'Focus changes during contact must preserve the mapping');
-    assert(outline.visible, 'Contact must keep the outline visible without motion');
+    assert(spotlight.visible, 'Contact must keep the spotlight visible without motion');
     pen(false, true, false);
     await Scripting.sleep(800);
     assert(area() !== first, 'Release must apply the most recent focused window');
@@ -100,8 +100,8 @@ while True:
     await Scripting.sleep(600);
     assert(area() === first, 'Application switching must apply the first window again');
     pen(false, false, false);
-    await Scripting.sleep(150);
-    assert(!outline.visible, 'Proximity-out must hide the outline');
+    await Scripting.sleep(450);
+    assert(!spotlight.visible, 'Proximity-out must hide the spotlight');
     Main.extensionManager.disableExtension(uuid);
     await Scripting.sleep(600);
     assert(area() === JSON.stringify(original), 'Disable must restore the baseline');

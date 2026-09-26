@@ -53,7 +53,7 @@ in stdenvNoCC.mkDerivation (finalAttrs: {
   '';
   passthru.extensionUuid = "otd-penframe@zendeus.github.io";
   meta = {
-    description = "Window-centered OpenTabletDriver mapping with a pen activity outline";
+    description = "Window-centered OpenTabletDriver mapping with a pen activity spotlight";
     platforms = lib.platforms.linux;
   };
 })

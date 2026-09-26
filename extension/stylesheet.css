@@ -1,5 +1,1 @@
-.otd-penframe-outline {
-    border: 2px solid rgba(80, 220, 255, 0.85);
-    border-radius: 4px;
-    background-color: transparent;
-}
+/* The borderless spotlight is painted by St.DrawingArea in overlay.ts. */
