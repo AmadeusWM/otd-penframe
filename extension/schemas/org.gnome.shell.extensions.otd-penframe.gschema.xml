@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.otd-penframe" path="/org/gnome/shell/extensions/otd-penframe/">
+    <key name="automatic-enabled" type="b">
+      <default>false</default>
+      <summary>Follow focused windows and show the outline only on pen activity</summary>
+    </key>
+    <key name="activity-helper" type="s">
+      <default>''</default>
+      <summary>Absolute path to penframe-activity, or empty to discover it on PATH</summary>
+    </key>
+    <key name="outline-idle-ms" type="i">
+      <default>700</default>
+      <range min="100" max="5000"/>
+      <summary>Hide the outline after this much pen inactivity, except during contact</summary>
+    </key>
+    <key name="calibration-enabled" type="b">
+      <default>false</default>
+      <summary>Allow manual calibration with the pen lifted before triggering</summary>
+      <description>Enables a 30-second mapping test in diagnostic mode, without the automatic mode's contact guard.</description>
+    </key>
+    <key name="calibrate-area" type="as">
+      <default>['&lt;Super&gt;&lt;Alt&gt;p']</default>
+      <summary>Apply the preview area temporarily, or restore it early</summary>
+    </key>
+    <key name="tablet-profile" type="s">
+      <default>''</default>
+      <summary>Exact OpenTabletDriver tablet profile name</summary>
+    </key>
+    <key name="otd-executable" type="s">
+      <default>''</default>
+      <summary>Absolute OTD executable path, or empty to discover it on PATH</summary>
+    </key>
+    <key name="area-width" type="i">
+      <default>800</default>
+      <range min="1" max="32768"/>
+      <summary>Target width in logical desktop units</summary>
+    </key>
+    <key name="area-height" type="i">
+      <default>500</default>
+      <range min="1" max="32768"/>
+      <summary>Target height in logical desktop units</summary>
+    </key>
+    <key name="settle-delay-ms" type="i">
+      <default>150</default>
+      <range min="0" max="2000"/>
+      <summary>Delay after window changes before updating the target</summary>
+    </key>
+  </schema>
+</schemalist>

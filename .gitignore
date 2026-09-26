@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.test-build/
+.shell-build/
+.dev-session/
+result
+*.zip
+__pycache__/
+.pytest_cache/
+.ruff_cache/

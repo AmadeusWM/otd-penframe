@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": ".shell-build"
+  },
+  "include": ["extension/ambient.d.ts", "tests/shell-ambient.d.ts", "tests/shell.ts"]
+}

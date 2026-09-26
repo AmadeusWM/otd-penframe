@@ -1,0 +1,7 @@
+{
+  "uuid": "otd-penframe@zendeus.github.io",
+  "name": "OTD Penframe",
+  "description": "Preview a fixed tablet target centered on the focused window.",
+  "shell-version": ["50"],
+  "settings-schema": "org.gnome.shell.extensions.otd-penframe"
+}
